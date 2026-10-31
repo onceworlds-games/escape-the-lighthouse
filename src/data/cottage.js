@@ -86,6 +86,7 @@ export default {
     { id: 'lifebuoy', wall: 0, x: 2.5, y: 1.5, d: 0.05, prop: 'lifebuoy' },
     { id: 'doormat', wall: 0, x: 0, d: 0.95, prop: 'rug', params: { w: 1.5, d: 0.9, color: '#5b3a2a', stripe: '#b9894f' } },
     { id: 'shelf_n', wall: 0, x: -0.2, y: 2.5, d: 0.05, prop: 'shelf', params: { w: 2.2, tins: true } },
+    { id: 'crate3', wall: 0, x: 2.3, d: 0.5, prop: 'crate', params: { w: 0.7 } },
     { id: 'stool', wall: 0, x: -2.3, d: 0.55, prop: 'stool' },
 
     // ---- east wall: the hearth ----
@@ -161,6 +162,9 @@ export default {
       ],
     },
     { id: 'bunkshelf', wall: 2, x: -1.0, y: 1.75, d: 0.12, prop: 'shelf', params: { w: 1.6, books: true } },
+    { id: 'bunkpic', wall: 2, x: -2.15, y: 1.45, d: 0.06, prop: 'painting', params: { w: 0.55, h: 0.42, art: 'sea' } },
+    { id: 'crate1', wall: 2, x: 2.4, d: 0.45, prop: 'crate', params: { w: 0.6 } },
+    { id: 'crate2', wall: 2, x: 2.45, y: 0.42, d: 0.45, ry: 12, prop: 'crate', params: { w: 0.46 } },
     { id: 'bunkrug', wall: 2, x: -0.4, d: 1.5, prop: 'rug', params: { w: 1.3, d: 1.0, color: '#3d4f5f', stripe: '#b9894f' } },
     { id: 'curtain2', wall: 2, x: 1.5, y: 2.35, d: 0.08, prop: 'curtain', params: { w: 1.5, h: 1.2 } },
 

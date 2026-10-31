@@ -491,3 +491,12 @@ def('door', (g, p) => {
     else tween(leaf.rotation, { y: a }, 1.4, ease.inOut);
   };
 });
+
+def('crate', (g, p) => {
+  const w = p.w || 0.6;
+  const m = PINE();
+  box(g, m, w, w * 0.7, w * 0.7, 0, w * 0.35, 0, { r: 0.008 });
+  for (const sx of [-1, 1]) box(g, DARK(), 0.04, w * 0.7 + 0.01, w * 0.7 + 0.01, sx * (w / 2 - 0.02), w * 0.35, 0);
+  box(g, DARK(), w + 0.01, 0.04, w * 0.7 + 0.01, 0, w * 0.7 - 0.02, 0);
+  box(g, M.black(), 0.25, 0.012, 0.002, 0.0, w * 0.35, w * 0.35 + 0.002);
+});

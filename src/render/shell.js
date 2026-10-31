@@ -34,7 +34,7 @@ class Bucket {
   constructor() {
     this.map = new Map();
   }
-  add(material, geo, x, y, z, ry = 0, rx = 0) {
+  add(material, geo, x, y, z, ry = 0, rx = 0, noCast = false) {
     const m = new THREE.Matrix4().compose(new THREE.Vector3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, 0, 'YXZ')), new THREE.Vector3(1, 1, 1));
     const g = geo.clone();
     g.applyMatrix4(m);
@@ -42,16 +42,21 @@ class Bucket {
     if (g.index) {
       const ng = g.toNonIndexed();
       g.dispose();
-      return this.push(material, ng);
+      return this.push(material, ng, noCast);
     }
-    this.push(material, g);
+    this.push(material, g, noCast);
   }
-  push(material, g) {
+  push(material, g, noCast) {
+    const key = noCast ? { m: material, n: 1 } : null;
+    const k = noCast ? (this.nc ||= new Map()).get(material) || (this.nc.set(material, { material, geos: [] }), this.nc.get(material)) : null;
+    if (noCast) return k.geos.push(g);
     if (!this.map.has(material)) this.map.set(material, []);
     this.map.get(material).push(g);
   }
   build(parent, cast = true) {
-    for (const [material, geos] of this.map) {
+    const groups = [...this.map].map(([material, geos]) => ({ material, geos, cast }));
+    if (this.nc) for (const v of this.nc.values()) groups.push({ material: v.material, geos: v.geos, cast: false });
+    for (const { material, geos, cast } of groups) {
       const merged = geos.length === 1 ? geos[0] : mergeGeos(geos);
       const mesh = new THREE.Mesh(merged, material);
       mesh.castShadow = cast;
@@ -122,8 +127,8 @@ function buildRect(room, root, B, quality) {
   ceil.position.y = H;
   ceil.receiveShadow = true;
   root.add(ceil);
-  for (const z of [-1.9, 0, 1.9]) B.add(DARK(), new THREE.BoxGeometry(sh.w, 0.22, 0.2), 0, H - 0.11, z, 0);
-  for (const x of [-2.2, 2.2]) B.add(DARK(), new THREE.BoxGeometry(0.16, 0.16, sh.d), x, H - 0.08, 0, 0);
+  for (const z of [-1.9, 0, 1.9]) B.add(DARK(), new THREE.BoxGeometry(sh.w, 0.22, 0.2), 0, H - 0.11, z, 0, 0, true);
+  for (const x of [-2.2, 2.2]) B.add(DARK(), new THREE.BoxGeometry(0.16, 0.16, sh.d), x, H - 0.08, 0, 0, 0, true);
   // a ship's lantern bracket at the door side and hanging herbs
   return fr;
 }
@@ -226,7 +231,7 @@ function buildRound(room, root, B, quality) {
   const dk = DARK();
   for (let i = 0; i < 8; i++) {
     const th = (i / 8) * TAU + Math.PI / 8;
-    B.add(dk, new THREE.BoxGeometry(0.18, 0.24, R), Math.sin(th) * R * 0.5, H - 0.12, -Math.cos(th) * R * 0.5, -th);
+    B.add(dk, new THREE.BoxGeometry(0.18, 0.24, R), Math.sin(th) * R * 0.5, H - 0.12, -Math.cos(th) * R * 0.5, -th, 0, true);
   }
   B.add(M.iron(), new THREE.CylinderGeometry(0.35, 0.35, 0.16, 16), 0, H - 0.08, 0, 0);
   // skirting ring

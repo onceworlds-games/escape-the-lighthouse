@@ -418,10 +418,8 @@ export function mergeStatic(root) {
     if (o.isMesh && !kept && !o.userData.noMerge && o.geometry && o.geometry.attributes.position && !o.isInstancedMesh) {
       const key = o.material.uuid + (o.castShadow ? 'c' : '') + (o.receiveShadow ? 'r' : '');
       if (!buckets.has(key)) buckets.set(key, { material: o.material, cast: o.castShadow, recv: o.receiveShadow, geos: [] });
-      let g = o.geometry.index ? o.geometry : o.geometry;
-      g = g.clone();
-      if (!g.index) g = g.toNonIndexed();
-      else g = g.toNonIndexed();
+      let g = o.geometry.clone();
+      if (g.index) g = g.toNonIndexed();
       g.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inv, o.matrixWorld));
       for (const name of Object.keys(g.attributes)) if (!['position', 'normal', 'uv'].includes(name)) g.deleteAttribute(name);
       if (!g.attributes.uv) g.setAttribute('uv', new THREE.BufferAttribute(new Float32Array((g.attributes.position.count || 0) * 2), 2));
