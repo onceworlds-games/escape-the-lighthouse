@@ -258,7 +258,7 @@ function buildLantern(room, root, B, quality) {
     const th = (i / N) * TAU;
     const x = Math.sin(th) * (R + T / 2);
     const z = -Math.cos(th) * (R + T / 2);
-    B.add(i % 3 === 1 ? paint : stone, wbox(segW, parapet, T, 1.5, i * 0.2, 0), x, parapet / 2, z, -th);
+    B.add(stone, wbox(segW, parapet, T, 1.5, i * 0.2, 0), x, parapet / 2, z, -th);
     B.add(stone, new THREE.BoxGeometry(segW, 0.07, T + 0.1), Math.sin(th) * (R + T / 2 - 0.02), parapet + 0.035, -Math.cos(th) * (R + T / 2 - 0.02), -th);
   }
   const iron = mat('lampIron', () => std(0x1d2024, 0.5, 0.7));

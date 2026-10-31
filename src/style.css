@@ -97,7 +97,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .wheels{display:flex;gap:10px}
 .wheel{width:62px;touch-action:none}
 .wheel .win{position:relative;height:96px;overflow:hidden;border-radius:8px;background:linear-gradient(#0d0906,#3b2c1d 30%,#4a3826 50%,#3b2c1d 70%,#0d0906);box-shadow:inset 0 0 0 2px #7a5a22,inset 0 0 14px #000}
-.wheel .win span{position:absolute;left:0;right:0;text-align:center;font:700 44px/32px var(--serif);color:#f2dfae;transition:transform .12s,opacity .12s}
+.wheel .win span{position:absolute;left:0;right:0;text-align:center;font:700 44px/32px var(--ui);font-variant-numeric:lining-nums;color:#f2dfae;transition:transform .12s,opacity .12s}
 .wheel .win .mid{top:32px;height:32px}
 .wheel .win .up{top:0;opacity:.35;transform:scale(.7)}
 .wheel .win .dn{top:64px;opacity:.35;transform:scale(.7)}

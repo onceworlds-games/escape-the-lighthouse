@@ -374,7 +374,7 @@ export function paintPlaque(ctx, w, h) {
   ctx.lineWidth = 6;
   ctx.strokeRect(12, 12, w - 24, h - 24);
   drawText(ctx, 'THIS LIGHT', w / 2, h * 0.24, { size: h * 0.16, color: '#2b1c06', spacing: 4 });
-  drawText(ctx, 'FIRST SHONE IN THE YEAR', w / 2, h * 0.46, { size: h * 0.13, color: '#2b1c06', spacing: 3 });
+  drawText(ctx, 'FIRST SHONE IN THE YEAR', w / 2, h * 0.46, { size: h * 0.1, color: '#2b1c06', spacing: 1 });
   drawText(ctx, '1891', w / 2, h * 0.76, { size: h * 0.3, color: '#2b1c06', spacing: 6 });
 }
 

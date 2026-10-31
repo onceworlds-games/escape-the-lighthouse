@@ -138,6 +138,11 @@ export class Game {
     if (d.get('select')) this.select(d.get('select'));
     if (d.get('lock')) setTimeout(() => this.openLock(d.get('lock')), 200);
     if (d.get('inspect')) setTimeout(() => this.inspectItem(d.get('inspect')), 200);
+    if (d.get('note')) setTimeout(() => this.process([{ t: 'note', id: d.get('note'), read: true, again: true }]), 400);
+    if (d.has('journal')) setTimeout(() => this.journal(), 400);
+    if (d.has('pause')) setTimeout(() => this.pause(), 400);
+    if (d.has('hint')) setTimeout(() => this.hint(), 400);
+    if (d.has('result')) setTimeout(() => this.escape({ t: 'escape', room: e.room.id, time: 412, hints: 1, stars: 2, last: d.get('result') === 'last', badges: [], best: 380 }), 400);
     if (d.get('lit')) {
       this.stage.finale = { turn: 0 };
     }
@@ -198,6 +203,7 @@ export class Game {
     );
   }
   begin(fresh, loaded) {
+    if (this.debug && this.debug.has('hold')) return;
     this.sound.start();
     this.sound.play('click');
     if (fresh) {
@@ -754,17 +760,17 @@ export class Game {
 
   // ---------- loop ----------
   frame(now) {
-    const dt = Math.min(0.1, (now - this.last) / 1000);
+    const dt = Math.max(0, Math.min(0.1, (now - this.last) / 1000));
     this.last = now;
     const running = !document.hidden && !this.platformPaused && ['play', 'lock', 'inspect', 'note', 'journal', 'cutscene'].includes(this.mode);
     if (running && this.mode !== 'cutscene') this.engine.tick(dt);
     if (this.mode === 'title') this.stage.pan = Math.sin(now / 5200) * 0.4;
     this.stage.update(dt);
     this.stage.draw();
-    if (this.debugOn) {
+    if (this.debugOn && this.debug.has('dbg')) {
       this.dbg ||= Object.assign(document.createElement('div'), { style: 'position:fixed;left:6px;top:60px;font:14px monospace;color:#0f0;z-index:99;pointer-events:none' });
       if (!this.dbg.parentNode) document.body.append(this.dbg);
-      this.dbg.textContent = `${this.mode} w${this.stage.wall} ${this.stage.view} yaw ${this.stage.pose.yaw.toFixed(2)} pan ${this.stage.pan.toFixed(2)} ${(this.stage.dbgLog || []).join(' ')}`;
+      this.dbg.textContent = `${this.mode} w${this.stage.wall} ${this.stage.view} yaw ${this.stage.pose.yaw.toFixed(2)} pan ${this.stage.pan.toFixed(2)} pitch ${this.stage.pose.pitch.toFixed(2)} fov ${this.stage.cam.fov.toFixed(0)} y ${this.stage.cam.position.toArray().map((v) => v.toFixed(2))} pp ${['px','py','pz'].map((k) => this.stage.pose[k].toFixed(2))} tr ${this.stage.trauma.toFixed(2)} t ${this.stage.time.toFixed(1)} asp ${this.stage.cam.aspect.toFixed(2)} ${(this.stage.dbgLog || []).join(' ')}`;
     }
     if (this.mode === 'play' || this.mode === 'lock') {
       this.hintTick += dt;

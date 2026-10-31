@@ -25,7 +25,7 @@ async function boot() {
   const game = new Game({ ow: window.onceworlds || null, canvas: document.getElementById('gl'), root: document.getElementById('ui'), debug: ui || params });
   window.__game = params.has('debug') || ui ? game : undefined;
   await game.start();
-  if (ui) setTimeout(() => (document.body.dataset.ready = '1'), 2500);
+  if (ui || params.has('debug')) setTimeout(() => (document.body.dataset.ready = '1'), 2500);
 }
 
 boot().catch((e) => {

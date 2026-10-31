@@ -13,10 +13,10 @@ export default {
     { name: "The Keeper's Desk", dir: 'W' },
   ],
   shell: { kind: 'lantern', r: 3.4, h: 3.4, style: 'lamp', openings: [] },
-  env: { outside: 'sea', ship: true, sky: 0x08101c, fog: 0x0a1220, fogDensity: 0.010, ambient: 0x34456a, ambientI: 0.65, moon: { from: [8, 8, 4], color: 0x8aa6e6, i: 1.1 }, exposure: 1.0 },
+  env: { outside: 'sea', ship: true, sky: 0x08101c, fog: 0x0a1220, fogDensity: 0.010, ambient: 0x3a4d78, ambientI: 1.1, moon: { from: [8, 8, 4], color: 0x8aa6e6, i: 1.1 }, exposure: 1.0 },
   lights: [
-    { id: 'desk', wall: 3, x: 0.3, y: 1.7, d: 0.7, color: 0xffb25c, i: 2.6, dist: 8, flicker: 0.2, shadow: true },
-    { id: 'stores', wall: 2, x: 0, y: 2.4, d: 0.9, color: 0xffb25c, i: 1.2, dist: 6, flicker: 0.1 },
+    { id: 'desk', wall: 3, x: 0.3, y: 1.7, d: 0.7, color: 0xffb25c, i: 5.0, dist: 9, flicker: 0.2, shadow: true },
+    { id: 'stores', wall: 2, x: 0, y: 2.4, d: 0.9, color: 0xffb25c, i: 2.6, dist: 7, flicker: 0.1 },
     { id: 'burner', wall: 0, x: 0, y: 1.9, d: 1.7, color: 0xfff0c0, i: 1.4, dist: 12, flicker: 0.05, showIf: 'burnerLit' },
   ],
 

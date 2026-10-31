@@ -273,7 +273,7 @@ export class Stage {
     const back = Math.min(1.25 * t, Math.max(0, reach));
     const p = this.frame.place(w, 0, 0);
     const len = Math.hypot(p.x, p.z) || 1;
-    return { px: (-p.x / len) * back, pz: (-p.z / len) * back, py: EYE, yaw: (-w * Math.PI) / 2, pitch: -0.035, fov, panMax: lerp(0.3, 0.62, t) };
+    return { px: (-p.x / len) * back, pz: (-p.z / len) * back, py: EYE, yaw: (-w * Math.PI) / 2, pitch: lerp(-0.17, -0.09, t), fov, panMax: lerp(0.3, 0.62, t) };
   }
   viewDef(id) {
     return this.room.views[id];
@@ -410,7 +410,7 @@ export class Stage {
 
   // ---------- frame ----------
   update(dt) {
-    dt = Math.min(dt, 0.1);
+    dt = Math.max(0, Math.min(dt, 0.1));
     this.time += dt;
     const t = this.time;
     updateTweens(dt);
@@ -436,7 +436,7 @@ export class Stage {
     // beam
     if (this.beam) this.updateBeam(dt);
     // camera
-    this.trauma = Math.max(0, this.trauma - dt * 0.9);
+    this.trauma = Math.min(1, Math.max(0, this.trauma - dt * 0.9));
     const sh = this.trauma * this.trauma;
     const p = this.pose;
     const idle = this.reduced ? 0 : 1;
