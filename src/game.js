@@ -728,7 +728,8 @@ export class Game {
       this.stage.addTrauma(0.3);
       await wait(1800);
     }
-    for (const b of ev.badges) safe(() => this.ow.badges.award(b));
+    // A ?debug page can jump rooms and run walkthroughs: it never awards badges, posts scores or saves.
+    if (!this.debugOn) for (const b of ev.badges) safe(() => this.ow.badges.award(b));
     this.submitScores(ev);
     this.flushSave();
     const r = e.room;
@@ -767,7 +768,7 @@ export class Game {
   }
   submitScores(ev) {
     const e = this.engine;
-    if (!ev.last || !this.ow || !this.ow.leaderboards) return;
+    if (this.debugOn || !ev.last || !this.ow || !this.ow.leaderboards) return;
     const all = ROOMS.map((r) => e.s.rooms[r.id]);
     if (all.every((r) => r && r.done && r.hints === 0)) {
       const total = Math.round(all.reduce((a, r) => a + r.time, 0));
@@ -782,7 +783,7 @@ export class Game {
   }
   flushSave() {
     clearTimeout(this.saveTimer);
-    if (!this.engine.s.started || !this.ow || !this.ow.save) return;
+    if (this.debugOn || !this.engine.s.started || !this.ow || !this.ow.save) return;
     Promise.resolve(safe(() => this.ow.save.set(SAVE_KEY, this.engine.serialize()))).catch(() => {});
   }
 
