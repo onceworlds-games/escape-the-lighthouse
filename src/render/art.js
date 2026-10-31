@@ -34,7 +34,6 @@ export function paintClockFace(ctx, w, h, { hour = 10, minute = 35, hands = fals
     const a = (i / 12) * TAU;
     drawText(ctx, roman[i], c + Math.sin(a) * R * 0.62, c - Math.cos(a) * R * 0.62, { size: w * 0.105, weight: 700, color: '#2a1a0c' });
   }
-  drawText(ctx, 'MARREN & SON', c, c - R * 0.28, { size: w * 0.04, weight: 600, color: '#5a3a22', spacing: 2 });
   if (hands) {
     const hr = ((hour % 12) + minute / 60) / 12;
     const mn = minute / 60;
@@ -342,23 +341,28 @@ export function paintTape(ctx, w, h, word) {
   ctx.fillStyle = 'rgba(0,0,0,0.08)';
   for (let x = 0; x < w; x += 24) ctx.fillRect(x, 0, 2, h);
   const letters = String(word).toUpperCase().split('');
-  const slot = w / (letters.length + 0.5);
+  const slot = w / letters.length;
+  const u = slot / 12;
   letters.forEach((L, i) => {
-    let x = slot * (i + 0.35);
+    let x = slot * i + u * 1.2;
     const y = h / 2;
     ctx.fillStyle = '#1b1208';
     for (const ch of MORSE[L] || '') {
       if (ch === '.') {
         ctx.beginPath();
-        ctx.arc(x + h * 0.09, y, h * 0.09, 0, TAU);
+        ctx.arc(x + u * 0.6, y, u * 0.6, 0, TAU);
         ctx.fill();
-        x += h * 0.3;
+        x += u * 2.2;
       } else {
         ctx.beginPath();
-        ctx.roundRect(x, y - h * 0.09, h * 0.42, h * 0.18, h * 0.09);
+        ctx.roundRect(x, y - u * 0.6, u * 2.2, u * 1.2, u * 0.6);
         ctx.fill();
-        x += h * 0.58;
+        x += u * 3.4;
       }
+    }
+    if (i) {
+      ctx.fillStyle = 'rgba(90,60,30,0.35)';
+      ctx.fillRect(slot * i - 1, h * 0.25, 2, h * 0.5);
     }
   });
 }

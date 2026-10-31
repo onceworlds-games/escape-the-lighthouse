@@ -53,12 +53,32 @@ export class Game {
     this.fit();
     addEventListener('resize', () => this.fit());
     if (settings && settings.on) settings.on('change', () => this.applySettings());
+    this.reserved();
     if (ow && ow.on) {
+      safe(() => ow.on('reserved', () => this.reserved()));
       ow.on('pause', () => (this.platformPaused = true));
       ow.on('resume', () => (this.platformPaused = false));
     }
     document.addEventListener('visibilitychange', () => document.hidden && this.flushSave());
     this.bindInput();
+  }
+
+  // Keep the HUD out of what the platform draws (its menu in the top-left corner, the touch controls).
+  reserved() {
+    let x = 150;
+    let y = 68;
+    const areas = safe(() => this.ow.ui.reserved);
+    if (Array.isArray(areas)) {
+      for (const a of areas) {
+        if (a && a.kind === 'menu' && a.x < 200 && a.y < 100) {
+          x = Math.max(x, Math.ceil(a.x + a.w + 8));
+          y = Math.max(y, Math.ceil(a.y + a.h));
+        }
+      }
+    }
+    const s = document.documentElement.style;
+    s.setProperty('--res-x', x + 'px');
+    s.setProperty('--res-y', y + 'px');
   }
 
   applySettings() {
@@ -175,12 +195,13 @@ export class Game {
     const sum = e.summary();
     const stars = sum.reduce((a, r) => a + r.stars, 0);
     const best = sum.some((r) => r.done) ? `STARS ${stars} / ${sum.length * 3}` : '';
+    const over = e.s.finished && e.rs.done;
     this.ui.title({
-      has: this.hasSave,
+      has: this.hasSave && !over,
       chapters: sum[1] && sum[1].unlocked,
       best,
       onContinue: () => this.begin(false),
-      onNew: () => (this.hasSave ? this.confirmNew() : this.begin(true)),
+      onNew: () => (this.hasSave && !over ? this.confirmNew() : this.begin(true)),
       onChapters: () => this.chapters(),
     });
   }
@@ -212,7 +233,12 @@ export class Game {
     }
     this.ui.hideTitle();
     this.engine.s.started = true;
-    if (fresh || loaded || this.stage.room !== this.engine.room) this.loadRoom();
+    let reload = fresh || loaded || this.stage.room !== this.engine.room;
+    if (!fresh && !loaded && this.engine.rs.done && this.engine.next()) {
+      this.engine.advance();
+      reload = true;
+    }
+    if (reload) this.loadRoom();
     this.enterPlay();
     this.scheduleSave();
   }
@@ -529,15 +555,17 @@ export class Game {
     this.newNotes = 0;
     const e = this.engine;
     const rooms = ROOMS.filter((r) => e.s.rooms[r.id]).map((r) => ({ name: r.name, notes: e.s.rooms[r.id].notes.map((id) => ({ id, ...r.notes[id], room: r.id })) }));
-    this.ui.journal(rooms, (n) => {
-      this.ui.closeOverlay();
-      const prevRoom = this.engine.room;
-      const note = { ...n };
-      if (note.art === 'tape') note.tapeWord = 'SHORE';
-      this.mode = 'note';
-      this.ui.noteCard(note, () => (this.mode = 'play'));
-    });
-    this.ui.overlay && (this.ui.ov.addEventListener('pointerdown', (ev) => ev.target === this.ui.ov && (this.mode = 'play')));
+    this.ui.journal(
+      rooms,
+      (n) => {
+        this.ui.closeOverlay();
+        const note = { ...n };
+        if (note.art === 'tape') note.tapeWord = 'SHORE';
+        this.mode = 'note';
+        this.ui.noteCard(note, () => (this.mode = 'play'));
+      },
+      () => (this.mode = 'play')
+    );
   }
 
   hint() {

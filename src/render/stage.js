@@ -7,6 +7,7 @@ import './props_a.js';
 import './props_b.js';
 import { buildOutside, updateOutside, placeShip, SEA_Y } from './weather.js';
 import { buildItem } from './items.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const shortest = (from, to) => from + Math.atan2(Math.sin(to - from), Math.cos(to - from));
 const LIGHT_K = 10;
@@ -24,6 +25,13 @@ export class Stage {
     this.renderer.toneMappingExposure = 1.15;
     this.renderer.shadowMap.enabled = this.quality !== 'low';
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    try {
+      const pm = new THREE.PMREMGenerator(this.renderer);
+      this.envMap = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+      pm.dispose();
+    } catch (e) {
+      this.envMap = null;
+    }
     this.scene = new THREE.Scene();
     this.cam = new THREE.PerspectiveCamera(60, 1, 0.05, 900);
     this.cam.rotation.order = 'YXZ';
@@ -116,6 +124,8 @@ export class Stage {
     const env = room.env;
     this.env = env;
     this.scene.background = new THREE.Color(env.sky);
+    this.scene.environment = this.envMap;
+    this.scene.environmentIntensity = 0.14;
     this.scene.fog = new THREE.FogExp2(env.fog, env.fogDensity);
     const shell = buildShell(room, this.quality);
     this.frame = shell.frame;
@@ -165,6 +175,7 @@ export class Stage {
         this.sizeShadow(light);
       } else {
         light = new THREE.PointLight(l.color, l.i * LIGHT_K, l.dist * 1.6, 2);
+        light.userData.wantShadow = false;
       }
       light.position.set(p.x, l.y, p.z);
       this.scene.add(light);
@@ -300,8 +311,6 @@ export class Stage {
     return this.view.startsWith('wall:') ? this.wallTarget(+this.view.slice(5)) : this.closeTarget(this.view);
   }
   applyPose(t, instant, dur = 0.9) {
-    (this.dbgLog ||= []).push(`${instant ? 'I' : 'T'}${t.yaw.toFixed(2)}`);
-    if (this.dbgLog.length > 6) this.dbgLog.shift();
     this.panMax = t.panMax || 0;
     const target = { px: t.px, py: t.py, pz: t.pz, yaw: shortest(this.pose.yaw, t.yaw), pitch: t.pitch, fov: t.fov };
     if (instant) Object.assign(this.pose, target);
@@ -429,9 +438,10 @@ export class Stage {
     }
     updateOutside(this.outside, t, dt, this.quality, this.flash);
     if (this.finale) placeShip(this.outside, 1, this.finale.turn);
-    this.moon.intensity = this.env.moon.i * 1.6 + this.flash * 5;
-    this.amb.intensity = this.env.ambientI + this.flash * 3.5;
-    this.fill.intensity = 0.55 + this.flash * 1.4;
+    this.moon.intensity = (this.env.moon.i * 1.6 + this.flash * 5) * (this.ambScale ?? 1);
+    const as = this.ambScale ?? 1;
+    this.amb.intensity = (this.env.ambientI + this.flash * 3.5) * as;
+    this.fill.intensity = (0.55 + this.flash * 1.4) * as;
     for (const d of this.drops || []) d.material.map.offset.y = (t * 0.01) % 1;
     // beam
     if (this.beam) this.updateBeam(dt);
@@ -465,7 +475,9 @@ export class Stage {
   itemIcon(id, size = 160) {
     if (this.iconCache.has(id)) return this.iconCache.get(id);
     const scene = new THREE.Scene();
-    scene.add(new THREE.HemisphereLight(0xfff0dc, 0x6a5a48, 1.6));
+    scene.environment = this.envMap;
+    scene.environmentIntensity = 0.8;
+    scene.add(new THREE.HemisphereLight(0xfff0dc, 0x6a5a48, 1.0));
     const key = new THREE.DirectionalLight(0xffffff, 3.2);
     key.position.set(1.5, 2.5, 2.5);
     scene.add(key);
@@ -517,6 +529,8 @@ export class Stage {
   startInspect(id) {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0d0a08);
+    scene.environment = this.envMap;
+    scene.environmentIntensity = 0.9;
     scene.add(new THREE.HemisphereLight(0xfff0dc, 0x50402e, 1.1));
     const key = new THREE.DirectionalLight(0xffe2b8, 3.0);
     key.position.set(2, 3, 3);
@@ -609,19 +623,34 @@ export class Stage {
   buildBeamPlaceholder() {}
 
   buildBeam() {
-    const lens = this.things.get('lampbase');
     const p = this.frame.place(0, 0, 1.7);
     const g = new THREE.Group();
     g.position.set(p.x, 1.55, p.z);
-    const beamMat = new THREE.MeshBasicMaterial({ color: 0xfff0c0, transparent: true, opacity: 0.0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, side: THREE.DoubleSide });
-    const cone = new THREE.Mesh(new THREE.ConeGeometry(7, 160, 16, 1, true), beamMat);
-    cone.rotation.z = Math.PI / 2;
-    cone.position.x = 80;
-    g.add(cone);
-    const cone2 = new THREE.Mesh(new THREE.ConeGeometry(3, 160, 12, 1, true), beamMat.clone());
-    cone2.rotation.z = Math.PI / 2;
-    cone2.position.x = 80;
-    g.add(cone2);
+    const make = (r0, len, strength) => {
+      const geo = new THREE.ConeGeometry(r0, len, 20, 6, true);
+      const pos = geo.attributes.position;
+      const col = new Float32Array(pos.count * 4);
+      for (let i = 0; i < pos.count; i++) {
+        const k = (pos.getY(i) + len / 2) / len; // 1 at the apex, 0 at the far end
+        const a = Math.pow(k, 1.6) * strength;
+        col.set([1, 0.94, 0.72, a], i * 4);
+      }
+      geo.setAttribute('color', new THREE.BufferAttribute(col, 4));
+      const m = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, side: THREE.DoubleSide });
+      const cone = new THREE.Mesh(geo, m);
+      cone.rotation.z = Math.PI / 2;
+      cone.position.x = len / 2;
+      cone.frustumCulled = false;
+      return cone;
+    };
+    const cones = [];
+    for (const r of [10, 8, 6.2, 4.6, 3.2, 2, 1]) {
+      const c = make(r, 170, 0.1);
+      cones.push(c);
+      g.add(c);
+    }
+    const cone = cones[0];
+    const cone2 = cones[cones.length - 1];
     this.scene.add(g);
     this.beam = { g, cone, cone2, power: 0, angle: 0 };
   }
@@ -629,7 +658,6 @@ export class Stage {
     const b = this.beam;
     b.angle += dt * 0.9 * b.power;
     b.g.rotation.y = b.angle;
-    b.cone.material.opacity = 0.16 * b.power;
-    b.cone2.material.opacity = 0.2 * b.power;
+    for (const c of b.g.children) c.material.opacity = b.power;
   }
 }

@@ -242,7 +242,7 @@ export class UI {
     p.textContent = note.body;
     c.append(p);
     if (note.art) {
-      const cv = canvasOf(512, note.art === 'morse' ? 760 : note.art === 'channel' ? 640 : 150);
+      const cv = canvasOf(512, note.art === 'morse' ? 760 : note.art === 'channel' ? 640 : 120);
       const g = cv.getContext('2d');
       if (note.art === 'morse') paintMorseChart(g, cv.width, cv.height);
       else if (note.art === 'channel') paintChannelChart(g, cv.width, cv.height);
@@ -256,7 +256,7 @@ export class UI {
     c.querySelector('.x').onclick = close;
     this.overlay(c, '', close);
   }
-  journal(rooms, open) {
+  journal(rooms, open, onClose) {
     const j = h('div', 'journal');
     j.innerHTML = '<h2>Notes</h2>';
     const list = h('div', 'list');
@@ -275,9 +275,13 @@ export class UI {
     j.append(list);
     const close = h('button', 'bigbtn sm alt', 'Close');
     close.style.alignSelf = 'center';
-    close.onclick = () => this.closeOverlay();
+    const shut = () => {
+      this.closeOverlay();
+      onClose && onClose();
+    };
+    close.onclick = shut;
     j.append(close);
-    this.overlay(j, '', () => this.closeOverlay());
+    this.overlay(j, '', shut);
   }
   hintCard(text, tier, left) {
     const c = h('div', 'card');
@@ -377,11 +381,12 @@ export class UI {
   }
   inspectView(name, cap) {
     this.closeInspect();
+    this.hud.classList.add('hidden');
     const e = h('div', '');
     e.id = 'inspect';
     e.innerHTML = `<div class="nm ol">${esc(name)}</div><div class="cap ol"></div><div class="hint ol">DRAG TO TURN</div>`;
     const done = this.ringBtn(ICON.back, 'Close', () => this.cb.closeInspect());
-    done.style.cssText = 'position:absolute;left:max(150px,env(safe-area-inset-left));top:10px';
+    done.style.cssText = 'position:absolute;left:max(var(--res-x,150px),env(safe-area-inset-left));top:10px';
     e.append(done);
     this.root.append(e);
     this.insp = e;
@@ -391,7 +396,10 @@ export class UI {
     if (this.insp) this.insp.querySelector('.cap').textContent = t || '';
   }
   closeInspect() {
-    if (this.insp) this.insp.remove();
+    if (this.insp) {
+      this.insp.remove();
+      this.hud.classList.remove('hidden');
+    }
     this.insp = null;
   }
 }

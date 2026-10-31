@@ -21,7 +21,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 
 /* top bar */
 #hud{position:absolute;left:0;right:0;top:0;height:0}
-#hud .tl{position:absolute;left:max(150px,env(safe-area-inset-left));top:10px;display:flex;gap:10px}
+#hud .tl{position:absolute;left:max(var(--res-x,150px),env(safe-area-inset-left));top:10px;display:flex;gap:10px}
 #hud .tr{position:absolute;right:10px;top:10px;display:flex;gap:10px}
 #hud .name{position:absolute;left:0;right:0;top:10px;text-align:center;pointer-events:none}
 #hud .name b{display:block;font:700 26px/1 var(--serif);letter-spacing:.14em;text-transform:uppercase}
@@ -185,7 +185,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 #flyer{position:fixed;width:64px;height:64px;pointer-events:none;z-index:9;filter:drop-shadow(0 4px 6px #000)}
 @media (max-width:760px) and (min-height:600px){
   :root{--slot:56px}
-  #hud .name{top:64px}
+  #hud .name{top:calc(var(--res-y,68px) + 8px)}
   #hud .name b{font-size:20px}
   #hud .name i{font-size:18px}
   #say{font-size:22px}
@@ -213,3 +213,16 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 #inv,#invtools{z-index:5}
 .fade{position:absolute;inset:0;background:#000;opacity:0;transition:opacity 1.2s;pointer-events:none;z-index:8}
 .fade.on{opacity:1}
+.plate{max-width:calc(100vw - 12px)}
+@media (max-width:480px){
+  .plate{padding:18px 14px}
+  .wheels{gap:6px}.wheel{width:50px}.wheel .win span{font-size:38px}
+  .switches{gap:6px}.sw{width:44px}.sw .lever{left:7px;right:7px}
+  .symrow{gap:8px}.symrow button{width:64px;height:64px}.symrow svg{width:44px;height:44px}
+  .slotsel .pip{width:48px;height:48px}
+  .morse .btns{gap:6px}.morse .btns button{font-size:16px;letter-spacing:.02em;min-width:0;padding:0}
+  .keypad{grid-template-columns:repeat(3,60px)}
+  .arrows{grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px)}
+  .card{padding:20px 20px 22px}
+  .card p,.card .hand{font-size:27px}
+}

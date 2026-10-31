@@ -46,11 +46,17 @@ function wheelsLock(ctx, faces, n, cls) {
       e.dn.textContent = faces[(pos[i] + 1) % L];
     });
   let timer = null;
+  const touched = new Set();
   const check = () => {
     clearTimeout(timer);
-    timer = setTimeout(() => attempt(ctx, pos.map((v) => faces[v]).join(''), p), 650);
+    // a dial opens as soon as it is right; a wrong set only buzzes once every wheel has been turned and you stop
+    timer = setTimeout(() => {
+      const code = pos.map((v) => faces[v]).join('');
+      if (code === String(ctx.lock.solution).toUpperCase() || touched.size >= n) attempt(ctx, code, p);
+    }, 1000);
   };
   const step = (i, d) => {
+    touched.add(i);
     pos[i] = (pos[i] + d + faces.length) % faces.length;
     ctx.sound('tick');
     ctx.save(pos.slice());
@@ -436,14 +442,16 @@ function ringsLock(ctx) {
   const draw = () => gs.forEach((g, r) => (g.style.transform = `rotate(${acc[r]}deg)`));
   draw();
   let timer = null;
+  const moved = new Set();
   const turn = (r, d) => {
+    moved.add(r);
     pos[r] = (pos[r] + d + L.positions) % L.positions;
     acc[r] -= d * step;
     ctx.sound('tick');
     ctx.save(pos.slice());
     draw();
     clearTimeout(timer);
-    timer = setTimeout(() => attempt(ctx, pos.slice(), p), 700);
+    timer = setTimeout(() => (pos.every((v, k) => v === L.solution[k]) || moved.size >= L.rings) && attempt(ctx, pos.slice(), p), 1100);
   };
   svg.addEventListener('pointerdown', (e) => {
     const rect = svg.getBoundingClientRect();

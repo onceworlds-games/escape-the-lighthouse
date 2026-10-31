@@ -23,7 +23,7 @@ export default {
       { wall: 1, x: -2.3, y: 1.35, w: 0.9, h: 1.3 },
     ],
   },
-  env: { outside: 'sea', sky: 0x0a1220, fog: 0x0a1220, fogDensity: 0.012, ambient: 0x3a4d78, ambientI: 1.0, moon: { from: [8, 7, -3], color: 0x7d9bdc, i: 1.0 }, exposure: 1.0 },
+  env: { outside: 'sea', sky: 0x0a1220, fog: 0x0a1220, fogDensity: 0.012, ambient: 0x3a4d78, ambientI: 0.7, moon: { from: [8, 7, -3], color: 0x7d9bdc, i: 1.0 }, exposure: 1.0 },
   lights: [
     { id: 'hang', wall: 0, x: 0.2, y: 2.5, d: 1.6, color: 0xffb25c, i: 7.0, dist: 12, flicker: 0.15, shadow: true, fixture: 'hanging' },
     { id: 'radio', wall: 0, x: -0.1, y: 1.2, d: 0.9, color: 0x6fe0a8, i: 0.5, dist: 3, flicker: 0, showIf: ['fuseIn', { lock: 'breakers' }] },
@@ -113,7 +113,7 @@ export default {
       ],
     },
     { id: 'headphones', wall: 0, x: 0.55, y: 0.78, d: 0.5, prop: 'headphones' },
-    { id: 'opchair', wall: 0, x: -0.1, d: 1.1, ry: 175, prop: 'chair' },
+    { id: 'opchair', wall: 0, x: -0.95, d: 1.15, ry: 200, prop: 'chair' },
     { id: 'tubeshelf', wall: 0, x: -1.7, y: 1.7, d: 0.12, prop: 'shelf', params: { w: 1.3, tubes: true } },
     { id: 'shipclock', wall: 0, x: 0.8, y: 2.25, d: 0.06, prop: 'wallclock', params: { r: 0.28 } },
     { id: 'cables', wall: 0, x: 1.25, y: 1.8, d: 0.05, prop: 'cables' },
