@@ -90,7 +90,7 @@ export default {
       ],
     },
     {
-      id: 'fuse_holder', name: 'Fuse holder', wall: 0, x: 0.52, y: 0.9, d: 0.7, hit: [0.2, 0.25, 0.2], view: 'radioview',
+      id: 'fuse_holder', name: 'Fuse holder', wall: 0, x: 0.23, y: 0.92, d: 0.8, hit: [0.17, 0.2, 0.12], view: 'radioview',
       tap: [
         { if: 'fuseIn', say: 'The mended fuse sits snug in its clips.' },
         { if: { got: 'blown_fuse' }, say: 'The holder is empty. A good fuse belongs here.' },
@@ -159,7 +159,7 @@ export default {
       use: { crank: [{ if: 'dynamoOn', say: 'It is already turning.' }, { say: 'You heave on the crank. The dynamo whines up to speed.', do: [{ set: 'dynamoOn' }, { sfx: 'dynamo' }] }] },
     },
     {
-      id: 'breakerbox', name: 'Breaker board', wall: 2, x: 1.3, y: 1.4, d: 0.1, prop: 'breakerbox', hit: [0.6, 0.8, 0.2], view: 'wall:2',
+      id: 'breakerbox', name: 'Breaker board', wall: 2, x: 1.3, y: 1.4, d: 0.1, prop: 'breakerbox', states: { set: { lock: 'breakers' } }, hit: [0.6, 0.8, 0.2], view: 'wall:2',
       tap: [{ do: [{ go: 'breakerview' }] }],
     },
     {

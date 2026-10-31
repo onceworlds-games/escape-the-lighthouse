@@ -49,9 +49,9 @@ export default {
     baseview: { wall: 0, x: 0, y: 1.2, d: 3.3, ty: 0.75, fov: 42, wid: 0.85, name: 'The Clockwork' },
     lensview: { wall: 0, x: 0, y: 1.8, d: 3.6, ty: 1.9, fov: 42, wid: 1.0, name: 'The Lens' },
     plaqueview: { wall: 1, x: -1.3, y: 1.6, d: 1.4, ty: 1.55, fov: 42, wid: 0.45, name: 'Plaque' },
-    eastview: { wall: 1, x: 1.9, y: 1.7, d: 1.4, ty: 1.7, fov: 42, wid: 0.4, name: 'East Post' },
-    southview: { wall: 2, x: 0.3, y: 1.7, d: 1.4, ty: 1.7, fov: 42, wid: 0.4, name: 'South Post' },
-    westview: { wall: 3, x: -2.0, y: 1.7, d: 1.4, ty: 1.7, fov: 42, wid: 0.4, name: 'West Post' },
+    eastview: { wall: 1, x: 1.78, y: 1.7, d: 1.4, ty: 1.7, fov: 42, wid: 0.4, name: 'East Post' },
+    southview: { wall: 2, x: 0, y: 1.7, d: 1.4, ty: 1.7, fov: 42, wid: 0.4, name: 'South Post' },
+    westview: { wall: 3, x: -1.78, y: 1.7, d: 1.4, ty: 1.7, fov: 42, wid: 0.4, name: 'West Post' },
     cabinetview: { wall: 2, x: -1.1, y: 1.4, d: 1.5, ty: 1.15, fov: 42, wid: 0.75, name: 'The Spares Cabinet' },
     chartview: { wall: 3, x: 1.5, y: 1.75, d: 1.5, ty: 1.75, fov: 42, wid: 0.75, name: 'Channel Chart' },
     deskview3: { wall: 3, x: 0.3, y: 1.5, d: 1.6, ty: 0.9, fov: 42, wid: 0.8, name: "The Keeper's Desk" },
@@ -59,7 +59,7 @@ export default {
 
   things: [
     // ---- wall 0: the lamp ----
-    { id: 'lampbase', wall: 0, x: 0, d: 1.7, prop: 'lampbase', states: { open: { lock: 'casehatch' }, geared: { lock: 'gearbox' } } },
+    { id: 'lampbase', wall: 0, x: 0, d: 1.7, prop: 'lampbase', states: { open: { lock: 'casehatch' }, geared: { lock: 'gearbox' }, wound: 'wound', tank: 'tankFilled', mantle: 'mantleIn', lit: 'burnerLit', focused: { lock: 'rings' }, beam: 'lampLit' } },
     {
       id: 'base_tap', name: 'Clockwork case', wall: 0, x: 0, y: 0.5, d: 1.45, hit: [1.2, 1.0, 0.5], view: 'wall:0',
       tap: [{ do: [{ go: 'baseview' }] }],
@@ -130,7 +130,7 @@ export default {
       tap: [{ do: [{ go: 'plaqueview' }, { set: 'sawPlaque' }, { note: 'plaqueObs', read: false }] }],
     },
     {
-      id: 'plate_east', name: 'East post plate', wall: 1, x: 1.9, y: 1.7, d: 0.1, prop: 'plate', params: { sign: 'anchor' }, hit: [0.5, 0.5, 0.14], view: 'wall:1',
+      id: 'plate_east', name: 'East post plate', wall: 1, x: 1.78, y: 1.7, d: 0.1, prop: 'plate', params: { sign: 'anchor' }, hit: [0.5, 0.5, 0.14], view: 'wall:1',
       tap: [{ do: [{ go: 'eastview' }, { set: 'sawEast' }, { note: 'postEast', read: false }] }],
     },
     { id: 'telescope', name: 'Telescope', wall: 1, x: 0.3, d: 0.8, prop: 'telescope', hit: [0.6, 1.5, 0.8, 0, 0.8, 0], view: 'wall:1', tap: [{ say: 'Through the glass: a ship with one lantern lit, steering straight for the Teeth.' }] },
@@ -172,7 +172,7 @@ export default {
       },
     },
     {
-      id: 'plate_south', name: 'South post plate', wall: 2, x: 0.3, y: 1.7, d: 0.1, prop: 'plate', params: { sign: 'wave' }, hit: [0.5, 0.5, 0.14], view: 'wall:2',
+      id: 'plate_south', name: 'South post plate', wall: 2, x: 0, y: 1.7, d: 0.1, prop: 'plate', params: { sign: 'wave' }, hit: [0.5, 0.5, 0.14], view: 'wall:2',
       tap: [{ do: [{ go: 'southview' }, { set: 'sawSouth' }, { note: 'postSouth', read: false }] }],
     },
     { id: 'coil3', wall: 2, x: 2.4, d: 0.5, prop: 'ropecoil' },
@@ -198,7 +198,7 @@ export default {
       tap: [{ do: [{ go: 'chartview' }, { set: 'sawChart' }, { note: 'channelObs', read: false }] }],
     },
     {
-      id: 'plate_west', name: 'West post plate', wall: 3, x: -2.0, y: 1.7, d: 0.1, prop: 'plate', params: { sign: 'star' }, hit: [0.5, 0.5, 0.14], view: 'wall:3',
+      id: 'plate_west', name: 'West post plate', wall: 3, x: -1.78, y: 1.7, d: 0.1, prop: 'plate', params: { sign: 'star' }, hit: [0.5, 0.5, 0.14], view: 'wall:3',
       tap: [{ do: [{ go: 'westview' }, { set: 'sawWest' }, { note: 'postWest', read: false }] }],
     },
     { id: 'deskchair3', wall: 3, x: 0.3, d: 1.4, ry: 170, prop: 'chair' },

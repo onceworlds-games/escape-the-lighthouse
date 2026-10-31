@@ -91,23 +91,23 @@ export default {
     // ---- east wall: the hearth ----
     { id: 'fireplace', wall: 1, x: 0, d: 0, prop: 'fireplace', params: { w: 2.1, h: 1.35 } },
     {
-      id: 'clock', name: 'Mantel clock', wall: 1, x: 0.55, y: 1.37, d: 0.2, prop: 'mantelclock', hit: [0.4, 0.55, 0.3, 0, 0.27, 0], view: 'wall:1',
+      id: 'clock', name: 'Mantel clock', wall: 1, x: 0.55, y: 1.42, d: 0.3, prop: 'mantelclock', hit: [0.4, 0.55, 0.3, 0, 0.27, 0], view: 'wall:1',
       tap: [{ do: [{ go: 'clockview' }] }],
     },
     {
-      id: 'clockface', name: 'Clock face', wall: 1, x: 0.55, y: 1.68, d: 0.3, hit: [0.36, 0.36, 0.12], view: 'clockview',
+      id: 'clockface', name: 'Clock face', wall: 1, x: 0.55, y: 1.73, d: 0.42, hit: [0.36, 0.36, 0.12], view: 'clockview',
       tap: [
         { if: 'sawClock', say: 'Ten thirty-five. The hands have not moved.' },
         { say: 'Roman numerals. The hands have stopped at ten thirty-five.', do: [{ set: 'sawClock' }, { note: 'clockObs', read: false }] },
       ],
     },
     {
-      id: 'bottle', name: 'Ship in a bottle', wall: 1, x: -0.5, y: 1.37, d: 0.2, prop: 'bottle', hit: [0.42, 0.3, 0.2, 0, 0.12, 0], view: 'clockview',
+      id: 'bottle', name: 'Ship in a bottle', wall: 1, x: -0.5, y: 1.42, d: 0.3, prop: 'bottle', hit: [0.42, 0.3, 0.2, 0, 0.12, 0], view: 'clockview',
       tap: [{ say: 'A tiny brig. MARGUERITE is lettered on her stern.', do: [{ note: 'bottleObs', read: false }] }],
     },
-    { id: 'candles', wall: 1, x: 0.95, y: 1.37, d: 0.18, prop: 'candlestick' },
-    { id: 'candles2', wall: 1, x: -0.95, y: 1.37, d: 0.18, prop: 'candlestick' },
-    { id: 'seascape', wall: 1, x: 0, y: 2.05, d: 0.06, prop: 'painting', params: { w: 1.15, h: 0.75, art: 'sea' } },
+    { id: 'candles', wall: 1, x: 0.95, y: 1.42, d: 0.3, prop: 'candlestick' },
+    { id: 'candles2', wall: 1, x: -0.95, y: 1.42, d: 0.3, prop: 'candlestick' },
+    { id: 'seascape', wall: 1, x: 0, y: 2.05, d: 0.14, prop: 'painting', params: { w: 1.15, h: 0.75, art: 'sea' } },
     { id: 'armchair', wall: 1, x: 1.9, d: 1.15, ry: -35, prop: 'armchair' },
     { id: 'logbasket', wall: 1, x: -1.55, d: 0.45, prop: 'logbasket' },
     { id: 'poker', wall: 1, x: 1.25, d: 0.18, prop: 'poker' },

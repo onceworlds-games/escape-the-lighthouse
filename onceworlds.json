@@ -1,0 +1,29 @@
+{
+  "slug": "escape-the-lighthouse",
+  "name": "Escape the Lighthouse",
+  "description": "Locked in a lighthouse on a stormy night. Search, solve, escape.",
+  "dir": "dist",
+  "productionBranch": "main",
+  "genre": "Puzzle",
+  "icon": "store/icon.png",
+  "thumbnails": ["store/thumb-1.png", "store/thumb-2.png", "store/thumb-3.png"],
+  "controls": [
+    { "keys": ["Click", "Tap"], "action": "Look, take, use" },
+    { "keys": ["A", "D", "Left", "Right"], "action": "Turn to the next wall" },
+    { "keys": ["Drag", "Swipe"], "action": "Look around, turn" },
+    { "keys": ["Esc", "S", "Down"], "action": "Back out of a close-up" },
+    { "keys": ["1", "9"], "action": "Select an item" },
+    { "keys": ["I"], "action": "Inspect the selected item" },
+    { "keys": ["H"], "action": "Ask for a hint" },
+    { "keys": ["J"], "action": "Open the notes" },
+    { "keys": ["P"], "action": "Pause" }
+  ],
+  "badges": [
+    { "id": "cottage", "name": "Out of the Cottage", "description": "Escape the keeper's cottage.", "icon": "store/badge-cottage.png" },
+    { "id": "radio", "name": "Signal Sent", "description": "Escape the radio room.", "icon": "store/badge-radio.png" },
+    { "id": "lamp", "name": "Keeper of the Light", "description": "Light the lamp.", "icon": "store/badge-lamp.png" },
+    { "id": "no-hints", "name": "No Help Needed", "description": "Finish a room without hints.", "icon": "store/badge-no-hints.png" },
+    { "id": "speedrun", "name": "Speed Keeper", "description": "Finish the whole game in under 25 minutes.", "icon": "store/badge-speedrun.png" },
+    { "id": "three-stars", "name": "Lighthouse Master", "description": "Earn 3 stars in every room.", "icon": "store/badge-three-stars.png" }
+  ]
+}
