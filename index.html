@@ -4,11 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Escape the Lighthouse</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>@font-face{font-family:"Cormorant Garamond";font-weight:600;font-style:normal;font-display:swap;src:url(./fonts/cormorant-garamond-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Cormorant Garamond";font-weight:700;font-style:normal;font-display:swap;src:url(./fonts/cormorant-garamond-latin-700-normal.woff2) format("woff2")}@font-face{font-family:"Cormorant Garamond";font-weight:600;font-style:italic;font-display:swap;src:url(./fonts/cormorant-garamond-latin-600-italic.woff2) format("woff2")}@font-face{font-family:"Caveat";font-weight:500;font-style:normal;font-display:swap;src:url(./fonts/caveat-latin-500-normal.woff2) format("woff2")}@font-face{font-family:"Barlow Condensed";font-weight:500;font-style:normal;font-display:swap;src:url(./fonts/barlow-condensed-latin-500-normal.woff2) format("woff2")}@font-face{font-family:"Barlow Condensed";font-weight:600;font-style:normal;font-display:swap;src:url(./fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Barlow Condensed";font-weight:700;font-style:normal;font-display:swap;src:url(./fonts/barlow-condensed-latin-700-normal.woff2) format("woff2")}</style>
 </head>
-<body>
+<body style="background:#050912">
+<div id="boot" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 40%,#1c2d4a,#050912);color:#f4e3b8;font:700 clamp(34px,7vw,88px)/.95 'Cormorant Garamond',Georgia,serif;letter-spacing:.1em;text-transform:uppercase;pointer-events:none;z-index:2">Escape the<br>Lighthouse</div>
 <canvas id="gl"></canvas>
 <div id="ui"></div>
 <script type="module" src="/src/main.js"></script>

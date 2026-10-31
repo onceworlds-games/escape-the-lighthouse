@@ -382,6 +382,7 @@ export class UI {
   inspectView(name, cap) {
     this.closeInspect();
     this.hud.classList.add('hidden');
+    this.tools.style.display = 'none';
     const e = h('div', '');
     e.id = 'inspect';
     e.innerHTML = `<div class="nm ol">${esc(name)}</div><div class="cap ol"></div><div class="hint ol">DRAG TO TURN</div>`;
@@ -399,6 +400,7 @@ export class UI {
     if (this.insp) {
       this.insp.remove();
       this.hud.classList.remove('hidden');
+      this.tools.style.display = '';
     }
     this.insp = null;
   }

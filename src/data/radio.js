@@ -65,13 +65,13 @@ export default {
   ],
 
   views: {
-    radioview: { wall: 0, x: -0.1, y: 1.3, d: 1.7, ty: 1.15, fov: 42, wid: 0.75, name: 'The Radio' },
+    radioview: { wall: 0, x: -0.1, y: 1.3, d: 1.7, ty: 1.02, fov: 42, wid: 0.75, name: 'The Radio' },
     toolboxview: { wall: 1, x: 0.2, y: 1.5, d: 1.6, ty: 0.95, fov: 42, wid: 0.65, name: 'The Toolbox' },
     pennantview: { wall: 1, x: 0, y: 2.2, d: 2.2, ty: 2.4, fov: 42, wid: 1.0, name: 'The Pennants' },
     breakerview: { wall: 2, x: 1.3, y: 1.4, d: 1.4, ty: 1.35, fov: 42, wid: 0.55, name: 'Breaker Board' },
     morseview: { wall: 3, x: 0.5, y: 1.65, d: 1.5, ty: 1.65, fov: 42, wid: 0.7, name: 'Morse Chart' },
-    tableview: { wall: 3, x: -0.85, y: 1.6, d: 1.4, ty: 0.85, fov: 42, wid: 0.75, name: 'Chart Table' },
-    pictureview: { wall: 3, x: -2.0, y: 1.65, d: 1.4, ty: 1.65, fov: 42, wid: 0.7, name: 'The Painting' },
+    tableview: { wall: 3, x: -0.65, y: 1.6, d: 1.4, ty: 0.85, fov: 42, wid: 0.75, name: 'Chart Table' },
+    pictureview: { wall: 3, x: -1.6, y: 1.65, d: 1.4, ty: 1.65, fov: 42, wid: 0.7, name: 'The Painting' },
   },
 
   things: [
@@ -139,13 +139,13 @@ export default {
       tap: [{ do: [{ go: 'pennantview' }, { set: 'sawFlags' }, { note: 'flagsObs', read: false }] }],
     },
     {
-      id: 'benchdrawer', name: 'Bench drawer', wall: 1, x: -0.85, y: 0.62, d: 0.8, hit: [0.6, 0.2, 0.2], view: 'wall:1',
+      id: 'benchdrawer', name: 'Bench drawer', wall: 1, x: -0.65, y: 0.62, d: 0.8, hit: [0.6, 0.2, 0.2], view: 'wall:1',
       tap: [
         { if: 'compassTaken', say: 'Nails, washers, a lost button.' },
         { say: 'In the bench drawer: a brass compass.', do: [{ set: 'compassTaken' }, { give: 'compass', from: 'benchdrawer' }, { sfx: 'drawer' }] },
       ],
     },
-    { id: 'pegboard', wall: 1, x: -0.85, y: 1.6, d: 0.06, prop: 'pegboard' },
+    { id: 'pegboard', wall: 1, x: -0.65, y: 1.6, d: 0.06, prop: 'pegboard' },
     { id: 'vise', wall: 1, x: 0.95, y: 0.92, d: 0.45, prop: 'vise' },
     { id: 'jerry1', wall: 1, x: 1.9, d: 0.5, prop: 'jerrycan' },
     { id: 'jerry2', wall: 1, x: 2.15, d: 0.7, ry: 25, prop: 'jerrycan' },
@@ -176,21 +176,21 @@ export default {
 
     // ---- wall 3: the chart wall ----
     {
-      id: 'picture', name: 'Painting', wall: 3, x: -2.0, y: 1.7, d: 0.06, prop: 'framedpic', states: { open: { lock: 'picture' } }, hit: [0.9, 0.9, 0.14], view: 'wall:3', lock: 'picture',
+      id: 'picture', name: 'Painting', wall: 3, x: -1.6, y: 1.7, d: 0.06, prop: 'framedpic', states: { open: { lock: 'picture' } }, hit: [0.9, 0.9, 0.14], view: 'wall:3', lock: 'picture',
       tap: [{ if: { lock: 'picture' }, say: 'The painting hangs open on its hinge.' }, { do: [{ go: 'pictureview' }] }],
     },
-    { id: 'picture_lock', name: 'Painting', wall: 3, x: -2.0, y: 1.7, d: 0.14, hit: [0.8, 0.8, 0.1], view: 'pictureview', lock: 'picture', hideIf: { lock: 'picture' } },
+    { id: 'picture_lock', name: 'Painting', wall: 3, x: -1.6, y: 1.7, d: 0.14, hit: [0.8, 0.8, 0.1], view: 'pictureview', lock: 'picture', hideIf: { lock: 'picture' } },
     {
-      id: 'battery_spot', name: 'Dry cell', wall: 3, x: -2.0, y: 1.7, d: 0.07, prop: 'item', params: { item: 'battery', flat: true }, hit: [0.4, 0.4, 0.3], view: 'pictureview', showIf: { lock: 'picture' }, hideIf: { got: 'battery' },
+      id: 'battery_spot', name: 'Dry cell', wall: 3, x: -1.6, y: 1.7, d: 0.07, prop: 'item', params: { item: 'battery', flat: true }, hit: [0.4, 0.4, 0.3], view: 'pictureview', showIf: { lock: 'picture' }, hideIf: { got: 'battery' },
       tap: [{ do: [{ give: 'battery', from: 'battery_spot' }, { say: 'A dry cell, wrapped in waxed cloth.' }] }],
     },
-    { id: 'charttable', wall: 3, x: -0.85, d: 0.55, prop: 'charttable', params: { w: 1.4 } },
+    { id: 'charttable', wall: 3, x: -0.65, d: 0.55, prop: 'charttable', params: { w: 1.4 } },
     {
-      id: 'sheet', name: 'Chart paper', wall: 3, x: -0.85, y: 0.82, d: 0.55, hit: [0.8, 0.12, 0.6], view: 'wall:3', lock: 'sheet',
+      id: 'sheet', name: 'Chart paper', wall: 3, x: -0.65, y: 0.82, d: 0.55, hit: [0.8, 0.12, 0.6], view: 'wall:3', lock: 'sheet',
       tap: [{ if: { lock: 'sheet' }, do: [{ readNote: 'schedule' }] }, { do: [{ go: 'tableview' }] }],
     },
     {
-      id: 'sheet_close', name: 'Chart paper', wall: 3, x: -0.85, y: 0.84, d: 0.55, hit: [0.8, 0.08, 0.6], view: 'tableview', lock: 'sheet',
+      id: 'sheet_close', name: 'Chart paper', wall: 3, x: -0.65, y: 0.84, d: 0.55, hit: [0.8, 0.08, 0.6], view: 'tableview', lock: 'sheet',
       tap: [
         { if: { lock: 'sheet' }, do: [{ readNote: 'schedule' }] },
         { if: { not: { has: 'uv_torch' } }, say: 'A sheet of chart paper. Blank, as far as you can see. Marks may be hiding in it.' },
@@ -201,8 +201,8 @@ export default {
       id: 'morsechart', name: 'Morse chart', wall: 3, x: 0.5, y: 1.65, d: 0.05, prop: 'morseposter', hit: [0.9, 1.1, 0.1], view: 'wall:3',
       tap: [{ do: [{ go: 'morseview' }, { note: 'morsechart', read: false }] }],
     },
-    { id: 'gate', name: 'Stair gate', wall: 3, x: 1.95, d: 0.1, prop: 'gate', states: { open: { lock: 'gate' } }, hit: [1.0, 2.3, 0.4, 0, 1.15, 0], view: 'wall:3', lock: 'gate' },
-    { id: 'chartstool', wall: 3, x: -0.85, d: 1.35, prop: 'stool' },
+    { id: 'gate', name: 'Stair gate', wall: 3, x: 1.75, d: 0.1, prop: 'gate', states: { open: { lock: 'gate' } }, hit: [1.0, 2.3, 0.4, 0, 1.15, 0], view: 'wall:3', lock: 'gate' },
+    { id: 'chartstool', wall: 3, x: -0.65, d: 1.35, prop: 'stool' },
     { id: 'globe', wall: 3, x: 0.15, y: 0.0, d: 0.9, prop: 'globe' },
   ],
 

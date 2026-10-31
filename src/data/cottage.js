@@ -59,8 +59,8 @@ export default {
 
   views: {
     clockview: { wall: 1, x: 0, y: 1.5, d: 1.6, ty: 1.55, fov: 42, wid: 0.95, name: 'The Mantel' },
-    chestview: { wall: 2, x: 1.5, y: 1.4, d: 1.5, ty: 0.4, fov: 42, wid: 0.75, name: 'The Sea Chest' },
-    deskview: { wall: 3, x: 0, y: 1.55, d: 1.7, ty: 0.85, fov: 42, wid: 1.0, name: 'The Desk' },
+    chestview: { wall: 2, x: 1.35, y: 0.95, d: 1.6, ty: 0.22, td: 0.6, fov: 42, wid: 0.75, name: 'The Sea Chest' },
+    deskview: { wall: 3, x: 0, y: 1.5, d: 1.7, ty: 0.55, fov: 42, wid: 1.0, name: 'The Desk' },
   },
 
   things: [
@@ -109,19 +109,19 @@ export default {
     { id: 'candles', wall: 1, x: 0.95, y: 1.42, d: 0.3, prop: 'candlestick' },
     { id: 'candles2', wall: 1, x: -0.95, y: 1.42, d: 0.3, prop: 'candlestick' },
     { id: 'seascape', wall: 1, x: 0, y: 2.05, d: 0.14, prop: 'painting', params: { w: 1.15, h: 0.75, art: 'sea' } },
-    { id: 'armchair', wall: 1, x: 1.9, d: 1.15, ry: -35, prop: 'armchair' },
+    { id: 'armchair', wall: 1, x: 1.45, d: 1.25, ry: -35, prop: 'armchair' },
     { id: 'logbasket', wall: 1, x: -1.55, d: 0.45, prop: 'logbasket' },
     { id: 'poker', wall: 1, x: 1.25, d: 0.18, prop: 'poker' },
     {
-      id: 'oilcan_floor', name: 'Oil can', wall: 1, x: -2.1, y: 0, d: 0.5, prop: 'item', params: { item: 'oilcan', floor: true }, hit: [0.4, 0.4, 0.4], hideIf: { got: 'oilcan' },
+      id: 'oilcan_floor', name: 'Oil can', wall: 1, x: -1.15, y: 0, d: 0.3, prop: 'item', params: { item: 'oilcan', floor: true }, hit: [0.4, 0.4, 0.4], hideIf: { got: 'oilcan' },
       tap: [{ do: [{ give: 'oilcan', from: 'oilcan_floor' }, { say: 'A rusty oil can, left by the hearth.' }] }],
     },
     { id: 'hearthrug', wall: 1, x: 0, d: 1.35, prop: 'rug', params: { w: 2.2, d: 1.5, color: '#6b2b2b', stripe: '#c9a063' } },
 
     // ---- south wall: the bunk ----
-    { id: 'bed', wall: 2, x: -1.0, d: 0.6, prop: 'bed' },
+    { id: 'bed', wall: 2, x: -0.4, d: 0.6, prop: 'bed' },
     {
-      id: 'underbed', name: 'Under the bed', wall: 2, x: -1.0, y: 0.18, d: 0.75, hit: [1.9, 0.34, 0.9],
+      id: 'underbed', name: 'Under the bed', wall: 2, x: -0.4, y: 0.18, d: 0.75, hit: [1.9, 0.34, 0.9],
       tap: [
         { if: { got: 'screwdriver' }, say: 'Dust and an old mouse nest.' },
         { say: 'Too dark to see under there. You would need a light.' },
@@ -135,37 +135,37 @@ export default {
       },
     },
     {
-      id: 'pillow', name: 'Pillow', wall: 2, x: -1.7, y: 0.62, d: 0.4, hit: [0.5, 0.2, 0.4],
+      id: 'pillow', name: 'Pillow', wall: 2, x: -1.1, y: 0.62, d: 0.4, hit: [0.5, 0.2, 0.4],
       tap: [
         { if: { note: 'letter' }, do: [{ readNote: 'letter' }] },
         { say: 'A folded letter is under the pillow.', do: [{ note: 'letter' }] },
       ],
     },
-    { id: 'pillowprop', wall: 2, x: -1.7, y: 0.5, d: 0.4, prop: 'pillow' },
+    { id: 'pillowprop', wall: 2, x: -1.1, y: 0.5, d: 0.4, prop: 'pillow' },
     {
-      id: 'chest', name: 'Sea chest', wall: 2, x: 1.5, d: 0.45, prop: 'chest', params: { w: 1.0, h: 0.55, dp: 0.55 }, hit: [1.1, 0.7, 0.7, 0, 0.35, 0],
+      id: 'chest', name: 'Sea chest', wall: 2, x: 1.35, d: 0.45, prop: 'chest', params: { w: 1.0, h: 0.55, dp: 0.55 }, hit: [1.1, 0.7, 0.7, 0, 0.35, 0],
       states: { open: 'chestOpen', unlocked: { lock: 'chest' } }, view: 'wall:2',
       tap: [{ do: [{ go: 'chestview' }] }],
     },
     {
-      id: 'padlock', name: 'Padlock', wall: 2, x: 1.5, y: 0.5, d: 0.75, hit: [0.3, 0.3, 0.2], view: 'chestview', lock: 'chest', hideIf: { lock: 'chest' },
+      id: 'padlock', name: 'Padlock', wall: 2, x: 1.35, y: 0.5, d: 0.75, hit: [0.3, 0.3, 0.2], view: 'chestview', lock: 'chest', hideIf: { lock: 'chest' },
     },
     {
-      id: 'chestkey', name: 'Iron key', wall: 2, x: 1.5, y: 0.5, d: 0.45, prop: 'item', params: { item: 'door_key', flat: true }, hit: [0.4, 0.3, 0.4], view: 'chestview', showIf: 'chestOpen', hideIf: { got: 'door_key' },
+      id: 'chestkey', name: 'Iron key', wall: 2, x: 1.35, y: 0.36, d: 0.55, prop: 'item', params: { item: 'door_key', flat: true }, hit: [0.4, 0.3, 0.4], view: 'chestview', showIf: 'chestOpen', hideIf: { got: 'door_key' },
       tap: [{ do: [{ give: 'door_key', from: 'chestkey' }, { say: 'A heavy iron key lies on the oilskins.' }] }],
     },
     {
-      id: 'bedside', name: 'Bedside table', wall: 2, x: -2.4, d: 0.3, prop: 'bedside', states: { open: 'bedsideOpen' }, hit: [0.55, 0.8, 0.5, 0, 0.4, 0],
+      id: 'bedside', name: 'Bedside table', wall: 2, x: -1.85, d: 0.3, prop: 'bedside', states: { open: 'bedsideOpen' }, hit: [0.55, 0.8, 0.5, 0, 0.4, 0],
       tap: [
         { if: 'bedsideOpen', say: 'Candle stub and a ring of dust.' },
         { say: 'The drawer sticks, then slides. A box of matches.', do: [{ set: 'bedsideOpen' }, { give: 'matches', from: 'bedside' }, { sfx: 'drawer' }] },
       ],
     },
-    { id: 'bunkshelf', wall: 2, x: -1.0, y: 1.75, d: 0.12, prop: 'shelf', params: { w: 1.6, books: true } },
-    { id: 'bunkpic', wall: 2, x: -2.15, y: 1.45, d: 0.06, prop: 'painting', params: { w: 0.55, h: 0.42, art: 'sea' } },
+    { id: 'bunkshelf', wall: 2, x: -0.4, y: 1.75, d: 0.12, prop: 'shelf', params: { w: 1.6, books: true } },
+    { id: 'bunkpic', wall: 2, x: 0.5, y: 1.45, d: 0.06, prop: 'painting', params: { w: 0.55, h: 0.42, art: 'sea' } },
     { id: 'crate1', wall: 2, x: 2.4, d: 0.45, prop: 'crate', params: { w: 0.6 } },
     { id: 'crate2', wall: 2, x: 2.45, y: 0.42, d: 0.45, ry: 12, prop: 'crate', params: { w: 0.46 } },
-    { id: 'bunkrug', wall: 2, x: -0.4, d: 1.5, prop: 'rug', params: { w: 1.3, d: 1.0, color: '#3d4f5f', stripe: '#b9894f' } },
+    { id: 'bunkrug', wall: 2, x: -0.2, d: 1.5, prop: 'rug', params: { w: 1.3, d: 1.0, color: '#3d4f5f', stripe: '#b9894f' } },
     { id: 'curtain2', wall: 2, x: 1.5, y: 2.35, d: 0.08, prop: 'curtain', params: { w: 1.5, h: 1.2 } },
 
     // ---- west wall: the desk ----
@@ -192,8 +192,8 @@ export default {
     },
     { id: 'deskchair', wall: 3, x: 0.1, d: 1.3, ry: 160, prop: 'chair' },
     { id: 'books', wall: 3, x: 0.45, y: 0.8, d: 0.5, prop: 'bookstack' },
-    { id: 'bookcase', wall: 3, x: -1.95, d: 0.2, prop: 'bookshelf', params: { w: 1.15, h: 2.05 }, view: 'wall:3', name: 'Bookshelf', tap: [{ say: 'Tide tables, hymn books, a seed catalogue. Nothing useful.' }], hit: [1.2, 2.1, 0.4, 0, 1.05, 0] },
-    { id: 'calendar', name: 'Calendar', wall: 3, x: 1.75, y: 1.6, d: 0.04, prop: 'calendar', hit: [0.4, 0.55, 0.1], view: 'wall:3', tap: [{ say: 'October. Every square is crossed off up to the last storm.' }] },
+    { id: 'bookcase', wall: 3, x: -1.6, d: 0.2, prop: 'bookshelf', params: { w: 1.15, h: 2.05 }, view: 'wall:3', name: 'Bookshelf', tap: [{ say: 'Tide tables, hymn books, a seed catalogue. Nothing useful.' }], hit: [1.2, 2.1, 0.4, 0, 1.05, 0] },
+    { id: 'calendar', name: 'Calendar', wall: 3, x: 1.5, y: 1.6, d: 0.04, prop: 'calendar', hit: [0.4, 0.55, 0.1], view: 'wall:3', tap: [{ say: 'October. Every square is crossed off up to the last storm.' }] },
     { id: 'photo', wall: 3, x: 1.2, y: 2.0, d: 0.04, prop: 'painting', params: { w: 0.5, h: 0.4, art: 'tower' } },
     { id: 'rug3', wall: 3, x: 0, d: 1.5, prop: 'rug', params: { w: 1.8, d: 1.2, color: '#4a3b2a', stripe: '#a67c52' } },
     { id: 'curtain3', wall: 3, x: 0, y: 2.4, d: 0.08, prop: 'curtain', params: { w: 1.6, h: 1.3 } },

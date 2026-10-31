@@ -101,7 +101,7 @@ export class Game {
   async start() {
     await Promise.race([
       Promise.all(['700 32px "Cormorant Garamond"', '500 32px Caveat', '600 32px "Barlow Condensed"'].map((f) => document.fonts.load(f))).catch(() => 0),
-      wait(2500),
+      wait(1200),
     ]);
     let saved = null;
     if (this.ow && this.ow.save) saved = await Promise.resolve(safe(() => this.ow.save.get(SAVE_KEY))).catch(() => null);
@@ -113,7 +113,10 @@ export class Game {
     this.debugJump();
     if (this.debugOn) this.sound.start();
     if (!this.debugOn || this.debug.get('title')) this.showTitle();
-    else this.enterPlay();
+    else {
+      document.getElementById('boot')?.remove();
+      this.enterPlay();
+    }
     this.last = performance.now();
     requestAnimationFrame((t) => this.frame(t));
   }
@@ -187,6 +190,8 @@ export class Game {
 
   // ---------- title and flow ----------
   showTitle() {
+    const boot = document.getElementById('boot');
+    if (boot) boot.remove();
     this.mode = 'title';
     this.ui.showHud(false);
     this.stage.view !== 'wall:' + this.stage.wall && this.stage.goView('wall:' + this.stage.wall, true);
@@ -293,7 +298,7 @@ export class Game {
       }
       if (this.mode !== 'play' && this.mode !== 'title') return;
       c.setPointerCapture(e.pointerId);
-      down = { x: e.clientX, y: e.clientY, t: performance.now(), lx: e.clientX, moved: 0, over: 0 };
+      down = { x: e.clientX, y: e.clientY, t: e.timeStamp, lx: e.clientX, moved: 0, over: 0 };
     });
     c.addEventListener('pointermove', (e) => {
       this.poke();
@@ -330,8 +335,8 @@ export class Game {
       if (this.mode !== 'play') return;
       const dx = e.clientX - d.x;
       const dy = e.clientY - d.y;
-      const dt = performance.now() - d.t;
-      if (d.moved < 10 && dt < 600) return this.tap(e.clientX, e.clientY);
+      const dt = e.timeStamp - d.t;
+      if (d.moved < 10) return this.tap(e.clientX, e.clientY);
       if (this.stage.view.startsWith('wall:')) {
         if (Math.abs(d.over) > 0.14 || (Math.abs(dx) > 90 && Math.abs(dy) < 70 && dt < 350)) this.turn(dx > 0 ? -1 : 1);
         this.stage.pan *= 0.999;
@@ -591,6 +596,7 @@ export class Game {
   // ---------- locks ----------
   openLock(id) {
     if (this.mode === 'lock') return;
+    this.ui.setTip(null);
     const e = this.engine;
     const lk = e.room.locks[id];
     if (!lk || e.rs.flags['lock:' + id]) return;
@@ -789,7 +795,7 @@ export class Game {
 
   // ---------- loop ----------
   frame(now) {
-    const dt = Math.max(0, Math.min(0.1, (now - this.last) / 1000));
+    const dt = Math.max(0, Math.min(0.5, (now - this.last) / 1000));
     this.last = now;
     const running = !document.hidden && !this.platformPaused && ['play', 'lock', 'inspect', 'note', 'journal', 'cutscene'].includes(this.mode);
     if (running && this.mode !== 'cutscene') this.engine.tick(dt);

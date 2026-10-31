@@ -24,7 +24,7 @@ export class Stage {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.15;
     this.renderer.shadowMap.enabled = this.quality !== 'low';
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
     try {
       const pm = new THREE.PMREMGenerator(this.renderer);
       this.envMap = pm.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -279,12 +279,12 @@ export class Stage {
   wallTarget(w) {
     const a = this.aspect();
     const t = clamp((1.3 - a) / 0.85, 0, 1);
-    const fov = lerp(60, 80, t);
+    const fov = lerp(60, 85, t);
     const reach = this.frame.reach((w + 2) % 4) - 0.9;
-    const back = Math.min(1.25 * t, Math.max(0, reach));
+    const back = Math.min(1.9 * t, Math.max(0, reach));
     const p = this.frame.place(w, 0, 0);
     const len = Math.hypot(p.x, p.z) || 1;
-    return { px: (-p.x / len) * back, pz: (-p.z / len) * back, py: EYE, yaw: (-w * Math.PI) / 2, pitch: lerp(-0.17, -0.09, t), fov, panMax: lerp(0.3, 0.62, t) };
+    return { px: (-p.x / len) * back, pz: (-p.z / len) * back, py: EYE, yaw: (-w * Math.PI) / 2, pitch: lerp(-0.17, -0.05, t), fov, panMax: lerp(0.3, 0.62, t) };
   }
   viewDef(id) {
     return this.room.views[id];
@@ -419,10 +419,11 @@ export class Stage {
 
   // ---------- frame ----------
   update(dt) {
-    dt = Math.max(0, Math.min(dt, 0.1));
+    const raw = Math.max(0, Math.min(dt, 0.5));
+    dt = Math.min(raw, 0.1);
     this.time += dt;
     const t = this.time;
-    updateTweens(dt);
+    updateTweens(raw);
     for (const u of this.updaters) u(dt, t);
     // lights
     for (const l of this.lights) {

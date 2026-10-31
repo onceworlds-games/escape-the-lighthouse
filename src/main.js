@@ -17,6 +17,7 @@ if (poster && poster.startsWith('ui-')) {
 
 async function boot() {
   if (poster) {
+    document.getElementById('boot')?.remove();
     const { runPoster } = await import('./poster.js');
     await runPoster(poster);
     return;
@@ -29,5 +30,6 @@ async function boot() {
 }
 
 boot().catch((e) => {
+  document.getElementById('boot')?.remove();
   console.error('[escape-the-lighthouse] failed to start', e);
 });
