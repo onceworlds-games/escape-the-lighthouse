@@ -7,6 +7,7 @@ if (poster && poster.startsWith('ui-')) {
   // a staged look at the real game with its interface: ui-room_1-wall_2-lock_chest (store/shot tooling)
   ui = new URLSearchParams();
   ui.set('debug', '1');
+  ui.set('still', '1');
   for (const kv of poster.slice(3).split('-')) {
     const [k, v] = kv.split('_');
     ui.set(k, v === undefined ? '1' : v);

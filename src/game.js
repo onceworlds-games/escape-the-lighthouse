@@ -248,6 +248,7 @@ export class Game {
   }
   bindInput() {
     const c = this.canvas;
+    if (this.debug && this.debug.has('still')) return;
     let down = null;
     c.addEventListener('pointerdown', (e) => {
       this.sound.start();
@@ -760,6 +761,11 @@ export class Game {
     if (this.mode === 'title') this.stage.pan = Math.sin(now / 5200) * 0.4;
     this.stage.update(dt);
     this.stage.draw();
+    if (this.debugOn) {
+      this.dbg ||= Object.assign(document.createElement('div'), { style: 'position:fixed;left:6px;top:60px;font:14px monospace;color:#0f0;z-index:99;pointer-events:none' });
+      if (!this.dbg.parentNode) document.body.append(this.dbg);
+      this.dbg.textContent = `${this.mode} w${this.stage.wall} ${this.stage.view} yaw ${this.stage.pose.yaw.toFixed(2)} pan ${this.stage.pan.toFixed(2)} ${(this.stage.dbgLog || []).join(' ')}`;
+    }
     if (this.mode === 'play' || this.mode === 'lock') {
       this.hintTick += dt;
       if (this.hintTick > 0.5) {

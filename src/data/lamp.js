@@ -17,7 +17,7 @@ export default {
   lights: [
     { id: 'desk', wall: 3, x: 0.3, y: 1.7, d: 0.7, color: 0xffb25c, i: 2.6, dist: 8, flicker: 0.2, shadow: true },
     { id: 'stores', wall: 2, x: 0, y: 2.4, d: 0.9, color: 0xffb25c, i: 1.2, dist: 6, flicker: 0.1 },
-    { id: 'burner', wall: 0, x: 0, y: 1.9, d: 1.7, color: 0xfff0c0, i: 5, dist: 12, flicker: 0.05, showIf: 'burnerLit' },
+    { id: 'burner', wall: 0, x: 0, y: 1.9, d: 1.7, color: 0xfff0c0, i: 1.4, dist: 12, flicker: 0.05, showIf: 'burnerLit' },
   ],
 
   items: {

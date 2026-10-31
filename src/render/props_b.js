@@ -477,7 +477,7 @@ def('lampbase', (g) => {
     gears.visible = !!st.geared;
     mantleM.visible = !!st.mantle;
     mantleM.material.color.setHex(st.lit ? 0xfff3c8 : 0x8a8576);
-    flash.material.opacity = st.lit ? 0.8 : 0;
+    flash.material.opacity = st.lit ? 0.45 : 0;
     tank.material.color.setHex(st.tank ? 0xd9a52a : 0x6a4a14);
     const a = st.open ? -1.8 : 0;
     if (instant) door.rotation.y = a;
@@ -487,7 +487,7 @@ def('lampbase', (g) => {
     beam = !!st.beam;
     focused = !!st.focused;
     rings.forEach((r, i) => r.material === brass ? 0 : 0);
-    beamGlow.material.opacity = beam ? 0.9 : 0;
+    beamGlow.material.opacity = beam ? 0.5 : 0;
   };
   g.userData.update = (dt, t) => {
     if (wound) {

@@ -300,6 +300,8 @@ export class Stage {
     return this.view.startsWith('wall:') ? this.wallTarget(+this.view.slice(5)) : this.closeTarget(this.view);
   }
   applyPose(t, instant, dur = 0.9) {
+    (this.dbgLog ||= []).push(`${instant ? 'I' : 'T'}${t.yaw.toFixed(2)}`);
+    if (this.dbgLog.length > 6) this.dbgLog.shift();
     this.panMax = t.panMax || 0;
     const target = { px: t.px, py: t.py, pz: t.pz, yaw: shortest(this.pose.yaw, t.yaw), pitch: t.pitch, fov: t.fov };
     if (instant) Object.assign(this.pose, target);
